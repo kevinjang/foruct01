@@ -1,0 +1,14 @@
+{
+  "name": "foruct01",
+  "version": "1.0.0",
+  "description": "express servre for umicmstest01",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kevinjang",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
