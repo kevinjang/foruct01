@@ -7,26 +7,21 @@ const config = {
     database: 'cmstest'
 }
 // sql.connect()
-test = async () => {
+query = async () => {
     let result;
     result = await (async () => {
         try {
-            console.log('config', config);
             let pool = await sql.connect(config)
             let result1 = await pool.request()
-                // .input
-                .query('select top 2 * from dbo.Brc_OC_OUBaseInfo');
-            // console.dir('result1',result1)
-            console.log('result1', result1)
-            // result1 = JSON.stringify(result1)
+                .query('select top 10 * from dbo.Brc_OC_OUBaseInfo where RecordStatus = 1');
 
             const rs = result1.recordsets;
-            console.log('recordsets',rs)
 
             pool.close();
+            sql.close();
             return result1
         } catch (error) {
-            console.log(error)
+            throw error
         }
     })()
 
@@ -34,9 +29,7 @@ test = async () => {
         console.log(err)
     });
 
-    console.log(result)
-
     return result;
 }
 
-module.exports = { test }
+module.exports = { query }

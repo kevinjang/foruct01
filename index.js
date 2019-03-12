@@ -1,50 +1,48 @@
 const express = require('express')
-// const {executeSQLServerState,queryRows} = require('./db')
-const { test } = require('./db2')
+const { query } = require('./db2')
 const app = express()
 
 // app.use
 app.all('*', function (req, res, next) {
-    res.header("Access-Control-Allow-Credentials", true)
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", 
-        "token,Origin, X-Requested-With, Content-Type, Accept,mid,X-Token")
-    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS")
-    res.header("X-Powered-By", ' 3.2.1')
-    res.header("Content-Type", "application/json;charset=utf-8")
+    res.set({
+        "Access-Control-Allow-Origin": "*",
+        'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
+        "Access-Control-Allow-Headers": "X-Requested-With",
+        'Access-Control-Allow-Headers': 'Content-Type'
+    });
     next()
 })
 
 app.get('/api/getOUBaseInfoAll', (req, res, next) => {
-    // db.executeSQLServerState()
-    // const qr = await executeSQLServerState();
-    // console.log('qr',qr)
-    test().then(result => {
-        // res.send(result.recordsets)
-
+    query().then(result => {
         const rows = result.recordsets[0];
 
         let colInfo = [];
 
-        rows.forEach(item => {
-            // console.log('item',item)
-            // item.forEach(item1=>{
-            //     console.log('key',item1);
-            // })
-
+        if(rows && rows.length > 0){
+            const item = rows[0]
             for (var item1 in item) {
-                // console.log('key',item1);
                 const col = {
                     dataIndex: item1,
-                    key: item1
+                    key: item1,
+                    title: item1
                 }
-
+                
                 colInfo.push(col)
             }
-        })
+        }
 
+        // rows.forEach(item => {
+        //     for (var item1 in item) {
+        //         const col = {
+        //             dataIndex: item1,
+        //             key: item1
+        //         }
 
-        // console.log('rows',rows)
+        //         colInfo.push(col)
+        //     }
+        // })
+
         res.json({
             datasource: rows,
             columns: colInfo
