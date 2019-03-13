@@ -13,9 +13,9 @@ query = async () => {
         try {
             let pool = await sql.connect(config)
             let result1 = await pool.request()
-                .query('select top 10 * from dbo.Brc_OC_OUBaseInfo where RecordStatus = 1');
+                .query('select top 1 * from dbo.Brc_OC_OUBaseInfo where RecordStatus = 1');
 
-            const rs = result1.recordsets;
+            // const rs = result1.recordsets;
 
             pool.close();
             sql.close();
