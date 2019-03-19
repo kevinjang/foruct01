@@ -1,5 +1,6 @@
 const express = require('express')
 const { query, getColumnsRelation } = require('./db2')
+const { queryCRSEventTitle } = require('./iprm')
 const app = express()
 
 // app.use
@@ -13,6 +14,9 @@ app.all('*', function (req, res, next) {
     next()
 })
 
+/**
+ * 17 Brc_BPM_Oc
+ */
 app.get('/api/getOUBaseInfoAll', (req, res, next) => {
 
     const { parentid,pageSize,currentPage } = req.query
@@ -60,6 +64,29 @@ app.get('/api/getOUBaseInfoAll', (req, res, next) => {
     }).catch(err => {
             console.log('err', err)
         });
+})
+
+/**
+ * 19 GWWPcfSysDB
+ */
+
+app.get('/api/getCRSEventTitle',(req,res,next)=>{
+    const {pageSize, currentPage} = req.query
+    queryCRSEventTitle({pageSize,currentPage}).then(resultx=>{
+        const {result1,allcount} = resultx
+        const allcountReal = allcount.recordsets[0].allcount
+        const rows = result1.recordsets[0].sort((v1,v2)=>{
+            return v1.ROWNUMBER > v2.ROWNUMBER
+        })
+
+        res.json({
+            datasource: rows,
+            allcount: allcountReal
+        })
+    })
+    .catch(err=>{
+        console.log('getCRSEventTitle-err',err)
+    })
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
